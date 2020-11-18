@@ -23,6 +23,7 @@
 #include <asm/io.h>
 #include <mach/platform.h>
 
+//structure for the register
 struct gpio_register_base{
 uint32_t GPIOSEL[6];  //first 6 select register with 32 bits
 uint32_t RESERVED;   //reserved register
@@ -31,7 +32,7 @@ uint32_t RESERVED_1; //reserved register
 uint32_t GPIOCLR[2]; //register to remove/clear gpio
 };
 
-//create a point to the structure pf registe
+//create a point to the structure of register
 struct gpio_register_base* gpio_struct;
 
 struct boilerplate_dev  {
@@ -113,25 +114,20 @@ static ssize_t boilerplate_write(struct file *filep, const char *buf, size_t cou
 // INIT function
 static int __init boilerplate_init(void)
 {
-
-
-	//code for led
-
+	//------------code for led---------/
 	//get the maping of real and virtual addressing
 	gpio_struct = (struct gpio_register_base*)ioremap(GPIO_BASE, sizeof(struct clone*))
-
      //example
-     //the set has 32 bits all of the belonging to one GPIO 1 means high and 0 means low
+     //the set has 32 bits all of them belonging to one GPIO 1 means high and 0 means low
      //set GPIO 24 as output
     setGPIO(18, 0); //set GPIO 24 as input  ,GPIO 24 has the index 18 as in documnetation
     setGPIO(18, 1); //set GPIO 24 as input
-
 	//set gpio 24 high(change the value in register to 1);
 	gpio_struct->GPIOSET[18]=1<<18;
-
 	//set gpio 23 as input
 	setGPIO(16, 0);
 	//get the value of the register
+  //if 1 than means is high if 0 that means is low
 	if(gpio_struct->GPIOSET[16]){
 	pr_info("The value of the GPIO 23 is high %i\n");
 }
